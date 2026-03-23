@@ -4,10 +4,10 @@ import React from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { AssessmentRadar } from '../radar/AssessmentRadar';
 import { UnifiedAssessmentOutput } from '@/services/assessment/scoringEngine';
-import { Shield, Users, Code, Target, ChevronRight, CheckCircle2, AlertCircle } from 'lucide-react';
-import { getPathwayMatches, RoleReadiness } from '@/services/assessment/pathwayEngine';
+import { Shield, Users, Code, Target, Zap, ArrowRight, AlertCircle, BarChart3 } from 'lucide-react';
+import { getPathwayMatches } from '@/services/assessment/pathwayEngine';
 import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
+import { cn } from '@/lib/utils';
 
 interface TriRadarDisplayProps {
   scores: UnifiedAssessmentOutput;
@@ -16,241 +16,195 @@ interface TriRadarDisplayProps {
 export function TriRadarDisplay({ scores }: TriRadarDisplayProps) {
   const matches = getPathwayMatches(scores);
   const topMatch = matches[0];
-  // Default data if scores are missing (MVP safety)
+  
   const foundationData = scores.foundationScores || {
-    'Communication': 4.2,
-    'Problem Solving': 3.8,
-    'Execution & Delivery': 4.5,
-    'Collaboration': 3.2,
-    'Adaptability': 4.7
+    'Communication': 4.2, 'Problem Solving': 3.8, 'Execution & Delivery': 4.5, 'Collaboration': 3.2, 'Adaptability': 4.7
   };
-
   const leadershipData = scores.leadershipScores || {
-    'Strategic Thinking': 3.0,
-    'Mentorship': 4.1,
-    'Executive Presence': 2.8,
-    'Influence': 3.5,
-    'Business Acumen': 3.2
+    'Strategic Thinking': 3.0, 'Mentorship': 4.1, 'Executive Presence': 2.8, 'Influence': 3.5, 'Business Acumen': 3.2
   };
-
   const technicalData = scores.technicalScores || {
-    'Architecture': 3.5,
-    'Code Quality': 4.8,
-    'Testing': 4.2,
-    'Operational Excellence': 3.9,
-    'Domain Expertise': 4.5
+    'Architecture': 3.5, 'Code Quality': 4.8, 'Testing': 4.2, 'Operational Excellence': 3.9, 'Domain Expertise': 4.5
   };
 
-  // Mock Target Data for "Target Role" overlay
   const foundationTarget = { 'Communication': 5.0, 'Problem Solving': 4.5, 'Execution & Delivery': 4.8, 'Collaboration': 4.5, 'Adaptability': 4.5 };
   const leadershipTarget = { 'Strategic Thinking': 4.0, 'Mentorship': 4.5, 'Executive Presence': 4.0, 'Influence': 4.5, 'Business Acumen': 4.0 };
   const technicalTarget = { 'Architecture': 4.5, 'Code Quality': 5.0, 'Testing': 4.5, 'Operational Excellence': 4.5, 'Domain Expertise': 5.0 };
 
   return (
-    <div className="w-full space-y-8">
-      {/* 1. PATHWAY READINESS SUMMARY (NEW) */}
-      <div className="bg-slate-900 rounded-2xl p-6 md:p-8 text-white shadow-xl relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/10 blur-[80px] rounded-full -mr-20 -mt-20" />
-        <div className="relative z-10 flex flex-col md:flex-row gap-8 items-center">
-          <div className="flex-1 text-center md:text-left">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-xs font-bold uppercase tracking-widest mb-4">
-              <Target className="h-3 w-3 text-blue-400" />
-              Primary Pathway Match
+    <div className="w-full space-y-12">
+      {/* 1. PATHWAY READINESS SUMMARY (Premium) */}
+      <div className="bg-[#1A1A1A] rounded-[3rem] p-10 md:p-14 text-white shadow-2xl relative overflow-hidden group">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-[#C89B3C]/10 blur-[120px] rounded-full -mr-32 -mt-32 group-hover:bg-[#C89B3C]/20 transition-all duration-1000" />
+        <div className="relative z-10 flex flex-col lg:flex-row gap-12 items-center">
+          <div className="flex-1 text-center lg:text-left space-y-6">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-[10px] font-black uppercase tracking-[0.3em] text-[#C89B3C]">
+              <Target className="h-3 w-3" />
+              Strategic Trajectory
             </div>
-            <h2 className="text-3xl font-bold mb-2">{topMatch.roleName}</h2>
-            <p className="text-slate-400 text-sm max-w-sm">
-              Based on your triple-radar diagnostic, you are currently best positioned for a {topMatch.roleName} trajectory.
+            <h2 className="text-4xl md:text-5xl font-black tracking-tighter leading-tight">
+              {topMatch.roleName}
+            </h2>
+            <p className="text-white/40 font-medium text-lg max-w-md leading-relaxed">
+              Your multidimensional diagnostic indicates an <span className="text-white font-bold">{topMatch.overallReadiness}% match</span> for this high-impact pathway.
             </p>
           </div>
           
-          <div className="flex flex-col items-center gap-4 px-8 border-x border-white/10">
-             <div className="relative w-32 h-32 flex items-center justify-center">
-                <svg className="w-full h-full transform -rotate-90">
+          <div className="flex flex-col items-center justify-center relative">
+             <div className="relative w-48 h-48 flex items-center justify-center">
+                <svg className="w-full h-full transform -rotate-90 drop-shadow-[0_0_20px_rgba(200,155,60,0.3)]">
                   <circle
-                    cx="64" cy="64" r="58"
-                    stroke="currentColor" strokeWidth="8"
+                    cx="96" cy="96" r="88"
+                    stroke="currentColor" strokeWidth="12"
                     fill="transparent" className="text-white/5"
                   />
                   <circle
-                    cx="64" cy="64" r="58"
-                    stroke="currentColor" strokeWidth="8"
+                    cx="96" cy="96" r="88"
+                    stroke="currentColor" strokeWidth="12"
                     fill="transparent"
-                    strokeDasharray={364.4}
-                    strokeDashoffset={364.4 - (364.4 * topMatch.overallReadiness) / 100}
-                    className="text-blue-500 transition-all duration-1000 ease-out"
+                    strokeDasharray={552.9}
+                    strokeDashoffset={552.9 - (552.9 * topMatch.overallReadiness) / 100}
+                    strokeLinecap="round"
+                    className="text-[#C89B3C] transition-all duration-1000 ease-out"
                   />
                 </svg>
-                <div className="absolute flex flex-col items-center">
-                  <span className="text-3xl font-black">{topMatch.overallReadiness}%</span>
-                  <span className="text-[10px] uppercase font-bold text-slate-400">Readiness</span>
+                <div className="absolute flex flex-col items-center animate-pulse">
+                  <span className="text-5xl font-black tracking-tighter">{topMatch.overallReadiness}%</span>
+                  <span className="text-[10px] uppercase font-black tracking-widest text-[#C89B3C]">Ready</span>
                 </div>
              </div>
           </div>
 
-          <div className="flex-1 space-y-4">
-             <div className="text-xs font-bold text-slate-500 uppercase tracking-widest">Dimension Integrity</div>
-             <div className="space-y-3">
+          <div className="flex-1 w-full space-y-6">
+             <div className="flex items-center gap-2 text-[10px] font-black text-white/40 uppercase tracking-[0.3em] mb-2">
+               <BarChart3 className="w-3 h-3" /> Integrity Analysis
+             </div>
+             <div className="space-y-4">
                 {[
-                  { label: 'Technical', val: topMatch.technical, color: 'text-emerald-400' },
-                  { label: 'Leadership', val: topMatch.leadership, color: 'text-purple-400' },
-                  { label: 'Foundation', val: topMatch.foundation, color: 'text-blue-400' }
+                  { label: 'Technical', val: topMatch.technical, color: 'bg-[#C89B3C]' },
+                  { label: 'Leadership', val: topMatch.leadership, color: 'bg-white/40' },
+                  { label: 'Foundation', val: topMatch.foundation, color: 'bg-white/20' }
                 ].map(dim => (
-                  <div key={dim.label} className="space-y-1">
-                    <div className="flex justify-between text-[11px] font-bold uppercase transition-all">
-                      <span className="text-slate-400">{dim.label}</span>
-                      <div className="flex items-center gap-2">
-                        <span className="text-[10px] bg-white/5 px-1.5 py-0.5 rounded text-slate-500">L1-L5</span>
-                        <span className={dim.val.isMet ? "text-emerald-400" : "text-amber-400"}>
-                          Level {dim.val.level.toFixed(1)} / {dim.val.required.toFixed(1)}
-                        </span>
-                      </div>
+                  <div key={dim.label} className="space-y-2">
+                    <div className="flex justify-between items-end">
+                      <span className="text-[10px] font-black uppercase tracking-widest text-white/60">{dim.label}</span>
+                      <span className="text-xs font-bold text-white">Level {dim.val.level.toFixed(1)} <span className="text-white/20">/ {dim.val.required.toFixed(1)}</span></span>
                     </div>
-                    <Progress value={(dim.val.level / 5) * 100} className="h-1 bg-white/5" />
+                    <div className="w-full h-1.5 bg-white/5 rounded-full overflow-hidden p-0.5 border border-white/5">
+                      <div 
+                        className={cn("h-full rounded-full transition-all duration-1000 delay-300", dim.color)}
+                        style={{ width: `${(dim.val.level / 5) * 100}%` }} 
+                      />
+                    </div>
                   </div>
                 ))}
              </div>
           </div>
         </div>
 
-        {/* Gap Analysis Warning */}
+        {/* Gap Analysis Warning (Premium) */}
         {topMatch.gaps.length > 0 && (
-          <div className="mt-8 flex items-center justify-between p-3 bg-amber-500/10 border border-amber-500/20 rounded-lg text-amber-200 text-xs">
-            <div className="flex items-center gap-3">
-              <AlertCircle className="h-4 w-4 shrink-0" />
-              <span><strong>Gap Detected:</strong> {topMatch.gaps.join(" | ")}</span>
+          <div className="mt-12 flex flex-col md:flex-row items-center justify-between p-6 bg-[#C89B3C]/10 border border-[#C89B3C]/20 rounded-3xl text-[#C89B3C] gap-4">
+            <div className="flex items-center gap-4">
+              <div className="w-10 h-10 rounded-full bg-[#C89B3C] flex items-center justify-center shadow-lg shadow-[#C89B3C]/20">
+                <AlertCircle className="h-5 w-5 text-white" />
+              </div>
+              <div className="space-y-1">
+                <p className="text-[10px] font-black uppercase tracking-widest text-[#C89B3C]/60">Optimization Required</p>
+                <p className="text-sm font-bold text-white">Critical Gaps: {topMatch.gaps.join(" • ")}</p>
+              </div>
             </div>
-            <div className="flex gap-2">
-               <Badge className="bg-amber-500/20 text-amber-500 border-amber-500/30 text-[10px]">Critical</Badge>
-            </div>
+            <button className="px-6 py-3 bg-[#C89B3C] text-[#1A1A1A] rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-white transition-all active:scale-95 shadow-xl shadow-[#C89B3C]/20">
+              Address Gaps
+            </button>
           </div>
         )}
       </div>
 
+      {/* 2. RADAR TABS (Premium) */}
       <Tabs defaultValue="foundation" className="w-full">
-        <div className="flex justify-center mb-8">
-          <TabsList className="grid w-full max-w-lg grid-cols-3 bg-slate-100 p-1 rounded-xl">
+        <div className="flex justify-center mb-12">
+          <TabsList className="flex bg-[#F5F2E9] p-2 rounded-[2rem] border border-[#1A1A1A]/5 shadow-inner w-full max-w-2xl">
             <TabsTrigger 
               value="foundation" 
-              className="rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-blue-600 flex items-center gap-2 py-2.5"
+              className="flex-1 rounded-[1.5rem] data-[state=active]:bg-[#1A1A1A] data-[state=active]:text-white data-[state=active]:shadow-2xl flex items-center justify-center gap-3 py-4 text-xs font-black uppercase tracking-widest transition-all"
             >
               <Shield className="h-4 w-4" />
-              <span className="font-semibold">Foundation</span>
+              Foundation
             </TabsTrigger>
             <TabsTrigger 
               value="leadership" 
-              className="rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-purple-600 flex items-center gap-2 py-2.5"
+              className="flex-1 rounded-[1.5rem] data-[state=active]:bg-[#1A1A1A] data-[state=active]:text-white data-[state=active]:shadow-2xl flex items-center justify-center gap-3 py-4 text-xs font-black uppercase tracking-widest transition-all"
             >
               <Users className="h-4 w-4" />
-              <span className="font-semibold">Leadership</span>
+              Leadership
             </TabsTrigger>
             <TabsTrigger 
               value="technical" 
-              className="rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-emerald-600 flex items-center gap-2 py-2.5"
+              className="flex-1 rounded-[1.5rem] data-[state=active]:bg-[#1A1A1A] data-[state=active]:text-white data-[state=active]:shadow-2xl flex items-center justify-center gap-3 py-4 text-xs font-black uppercase tracking-widest transition-all"
             >
               <Code className="h-4 w-4" />
-              <span className="font-semibold">Technical</span>
+              Technical
             </TabsTrigger>
           </TabsList>
         </div>
 
-        <TabsContent value="foundation" className="animate-in fade-in zoom-in-95 duration-500">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-            <div className="lg:col-span-12 xl:col-span-7">
-              <AssessmentRadar 
-                title="Foundation Workplace Skills"
-                description="Core interpersonal and behavioral competencies."
-                data={foundationData}
-                targetData={foundationTarget}
-                color="#3b82f6"
-              />
-            </div>
-            <div className="lg:col-span-12 xl:col-span-5 space-y-4">
-              <div className="p-6 bg-blue-50/50 border border-blue-100 rounded-xl">
-                <h3 className="text-sm font-bold text-blue-900 uppercase tracking-tight mb-3">Foundation Insight</h3>
-                <p className="text-blue-800 text-sm leading-relaxed italic">
-                  "Your foundational skills are the bedrock of your career."
-                </p>
+        {/* Tab Contents with Premium Layout */}
+        {[
+          { id: 'foundation', title: 'Foundation Mastery', desc: 'Core interpersonal and behavioral behaviors.', data: foundationData, target: foundationTarget },
+          { id: 'leadership', title: 'Leadership Readiness', desc: 'Strategic alignment and mentorship capabilities.', data: leadershipData, target: leadershipTarget },
+          { id: 'technical', title: 'Technical Excellence', desc: 'Precision execution and domain architecture.', data: technicalData, target: technicalTarget }
+        ].map(tab => (
+          <TabsContent key={tab.id} value={tab.id} className="animate-in fade-in slide-in-from-bottom-4 duration-700">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+              <div className="lg:col-span-7 bg-white p-10 rounded-[4rem] border border-[#1A1A1A]/5 shadow-sm transition-all hover:shadow-xl">
+                <AssessmentRadar 
+                  title={tab.title}
+                  description={tab.desc}
+                  data={tab.data}
+                  targetData={tab.target}
+                  color="#C89B3C"
+                />
               </div>
-              <div className="flex flex-col gap-3">
-                 <div className="text-xs font-bold text-slate-400 uppercase ml-1">Focus Areas</div>
-                 {Object.entries(foundationData).map(([domain, score]) => (
-                   <div key={domain} className="bg-white border border-slate-200 px-4 py-3 rounded-lg flex justify-between items-center group hover:border-blue-400">
-                      <span className="text-sm font-medium text-slate-700">{domain}</span>
-                      <div className="h-1 w-16 bg-slate-100 rounded-full overflow-hidden">
-                         <div className="h-full bg-blue-500" style={{ width: `${((score as number) / 5) * 100}%` }} />
-                      </div>
-                   </div>
-                 ))}
-              </div>
-            </div>
-          </div>
-        </TabsContent>
+              
+              <div className="lg:col-span-5 space-y-8">
+                <div className="bg-[#1A1A1A] p-10 rounded-[3rem] text-white space-y-6 relative overflow-hidden">
+                  <div className="relative z-10">
+                    <div className="flex items-center gap-2 text-[#C89B3C] mb-4">
+                       <Zap className="w-4 h-4" />
+                       <span className="text-[10px] font-black uppercase tracking-widest">Dimension Logic</span>
+                    </div>
+                    <h4 className="text-2xl font-black mb-4 tracking-tight">Focus Protocol</h4>
+                    <p className="text-white/60 font-medium leading-relaxed italic">
+                      "To advance to Level {(Math.ceil(Object.values(tab.data).reduce((a,b)=>a+(b as number),0)/5) + 0.5).toFixed(1)}, prioritize consistency in <span className="text-white font-bold">{Object.keys(tab.data)[0]}</span> exercises."
+                    </p>
+                  </div>
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-[#C89B3C]/5 rounded-full blur-3xl" />
+                </div>
 
-        <TabsContent value="leadership" className="animate-in fade-in zoom-in-95 duration-500">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-            <div className="lg:col-span-12 xl:col-span-7">
-              <AssessmentRadar 
-                title="Leadership Readiness"
-                description="Capabilities related to strategic alignment and mentorship."
-                data={leadershipData}
-                targetData={leadershipTarget}
-                color="#8b5cf6"
-              />
-            </div>
-            <div className="lg:col-span-12 xl:col-span-5 space-y-4">
-              <div className="p-6 bg-purple-50/50 border border-purple-100 rounded-xl">
-                <h3 className="text-sm font-bold text-purple-900 uppercase tracking-tight mb-3">Leadership Insight</h3>
-                <p className="text-purple-800 text-sm leading-relaxed italic">
-                  "Leading requires a balance of empathy and strategy."
-                </p>
-              </div>
-              <div className="flex flex-col gap-3">
-                 <div className="text-xs font-bold text-slate-400 uppercase ml-1">Focus Areas</div>
-                 {Object.entries(leadershipData).map(([domain, score]) => (
-                   <div key={domain} className="bg-white border border-slate-200 px-4 py-3 rounded-lg flex justify-between items-center group hover:border-purple-400">
-                      <span className="text-sm font-medium text-slate-700">{domain}</span>
-                      <div className="h-1 w-16 bg-slate-100 rounded-full overflow-hidden">
-                         <div className="h-full bg-purple-500" style={{ width: `${((score as number) / 5) * 100}%` }} />
-                      </div>
+                <div className="space-y-4">
+                   <div className="flex justify-between items-center px-4">
+                     <span className="text-[10px] font-black text-[#1A1A1A]/40 uppercase tracking-widest">Sub-Domain Precision</span>
+                     <BarChart3 className="w-3 h-3 text-[#1A1A1A]/20" />
                    </div>
-                 ))}
-              </div>
-            </div>
-          </div>
-        </TabsContent>
-
-        <TabsContent value="technical" className="animate-in fade-in zoom-in-95 duration-500">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-            <div className="lg:col-span-12 xl:col-span-7">
-              <AssessmentRadar 
-                title="Technical Excellence"
-                description="Evaluation of execution quality and domain expertise."
-                data={technicalData}
-                targetData={technicalTarget}
-                color="#10b981"
-              />
-            </div>
-            <div className="lg:col-span-12 xl:col-span-5 space-y-4">
-              <div className="p-6 bg-emerald-50/50 border border-emerald-100 rounded-xl">
-                <h3 className="text-sm font-bold text-emerald-900 uppercase tracking-tight mb-3">Technical Insight</h3>
-                <p className="text-emerald-800 text-sm leading-relaxed italic">
-                  "Your technical mastery defines your output quality."
-                </p>
-              </div>
-              <div className="flex flex-col gap-3">
-                 <div className="text-xs font-bold text-slate-400 uppercase ml-1">Focus Areas</div>
-                 {Object.entries(technicalData).map(([domain, score]) => (
-                   <div key={domain} className="bg-white border border-slate-200 px-4 py-3 rounded-lg flex justify-between items-center group hover:border-emerald-400">
-                      <span className="text-sm font-medium text-slate-700">{domain}</span>
-                      <div className="h-1 w-16 bg-slate-100 rounded-full overflow-hidden">
-                         <div className="h-full bg-emerald-500" style={{ width: `${((score as number) / 5) * 100}%` }} />
-                      </div>
+                   <div className="grid grid-cols-1 gap-3">
+                     {Object.entries(tab.data).map(([domain, score]) => (
+                       <div key={domain} className="bg-white border border-[#1A1A1A]/5 px-6 py-4 rounded-2xl flex justify-between items-center group hover:bg-[#F5F2E9] hover:border-[#C89B3C]/20 transition-all cursor-default">
+                          <span className="text-sm font-black text-[#1A1A1A] tracking-tight">{domain}</span>
+                          <div className="flex items-center gap-4">
+                            <span className="text-xs font-black text-[#C89B3C] italic">{Number(score).toFixed(1)}</span>
+                            <div className="h-1.5 w-20 bg-[#1A1A1A]/5 rounded-full overflow-hidden p-0.5 border border-[#1A1A1A]/5">
+                               <div className="h-full bg-[#C89B3C] rounded-full shadow-[0_0_8px_rgba(200,155,60,0.5)]" style={{ width: `${(Number(score) / 5) * 100}%` }} />
+                            </div>
+                          </div>
+                       </div>
+                     ))}
                    </div>
-                 ))}
+                </div>
               </div>
             </div>
-          </div>
-        </TabsContent>
+          </TabsContent>
+        ))}
       </Tabs>
     </div>
   );

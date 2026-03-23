@@ -7,9 +7,9 @@ import InterestAssessmentFlow from '@/components/assessment/InterestAssessmentFl
 import RadarAssessmentFlow from '@/components/assessment/RadarAssessmentFlow';
 import { foundationDomains, leadershipDomains, technicalDomains } from '@/services/assessment/radarQuestionBank';
 import { analytics } from '@/lib/analytics';
-import { AlertCircle, Loader2 } from 'lucide-react';
+import { ShieldCheck, Info, Sparkles, ChevronRight, Loader2 } from 'lucide-react';
 
-type AssessmentStage = 'entry' | 'interest' | 'foundation' | 'leadership' | 'technical' | 'complete';
+type AssessmentStage = 'entry' | 'interest' | 'foundation' | 'technical' | 'leadership' | 'complete';
 
 export default function AssessmentPage() {
   const [stage, setStage] = useState<AssessmentStage>('entry');
@@ -21,7 +21,6 @@ export default function AssessmentPage() {
     setStage(path === 'interest' ? 'interest' : 'foundation');
   };
 
-  // We'll eventually save these to Supabase, holding them in memory for now
   const [results, setResults] = useState<any>({});
 
   const handleInterestComplete = () => {
@@ -29,14 +28,14 @@ export default function AssessmentPage() {
   };
 
   const handleRadarComplete = async (
-    radarType: 'foundation' | 'leadership' | 'technical', 
+    radarType: 'foundation' | 'technical' | 'leadership', 
     scores: Record<string, number>, 
     reflections: Record<string, string>
   ) => {
     setIsSaving(true);
     
     // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 800));
+    await new Promise(resolve => setTimeout(resolve, 1200));
 
     // Save partial results
     setResults((prev: any) => ({
@@ -46,10 +45,10 @@ export default function AssessmentPage() {
 
     analytics.track(`${radarType}_radar_completed`);
 
-    // Orchestration flow
-    if (radarType === 'foundation') setStage('leadership');
-    if (radarType === 'leadership') setStage('technical');
-    if (radarType === 'technical') {
+    // UPDATED ORCHESTRATION FLOW: Foundation -> Technical -> Leadership
+    if (radarType === 'foundation') setStage('technical');
+    else if (radarType === 'technical') setStage('leadership');
+    else if (radarType === 'leadership') {
       analytics.track(analytics.events.ASSESSMENT_COMPLETED);
       setStage('complete');
     }
@@ -59,73 +58,108 @@ export default function AssessmentPage() {
   };
 
   return (
-    <div className="w-full min-h-[calc(100vh-4rem)] flex flex-col relative">
+    <div className="w-full min-h-[calc(100vh-10rem)] flex flex-col relative bg-white/40 backdrop-blur-sm rounded-3xl border border-[#1A1A1A]/5 shadow-sm overflow-hidden">
       {isSaving && (
-        <div className="absolute inset-0 bg-white/80 backdrop-blur-sm z-50 flex flex-col items-center justify-center space-y-4">
-           <Loader2 className="w-10 h-10 text-slate-900 animate-spin" />
-           <p className="font-bold text-slate-900">Calculating your trajectory...</p>
+        <div className="absolute inset-0 bg-[#F5F2E9]/80 backdrop-blur-md z-50 flex flex-col items-center justify-center space-y-4 animate-in fade-in duration-300">
+           <div className="relative">
+              <Loader2 className="w-16 h-16 text-[#C89B3C] animate-spin" />
+              <Sparkles className="w-6 h-6 text-[#C89B3C] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
+           </div>
+           <p className="font-bold text-[#1A1A1A] text-lg tracking-tight">Syncing your career intelligence...</p>
         </div>
       )}
-      {stage === 'entry' && (
-        <AssessmentEntry onSelectPath={handleEntrySelection} />
-      )}
+      
+      <div className="flex-1 flex flex-col">
+        {stage === 'entry' && (
+          <AssessmentEntry onSelectPath={handleEntrySelection} />
+        )}
 
-      {stage === 'interest' && (
-        <InterestAssessmentFlow 
-          onComplete={handleInterestComplete} 
-          onSkip={() => setStage('foundation')} 
-        />
-      )}
+        {stage === 'interest' && (
+          <InterestAssessmentFlow 
+            onComplete={handleInterestComplete} 
+            onSkip={() => setStage('foundation')} 
+          />
+        )}
 
-      {stage === 'foundation' && (
-        <RadarAssessmentFlow 
-          assessmentType="foundation"
-          title="Foundation Radar"
-          description="Assess your baseline workplace habits. Remember, score based on the LAST 3 MONTHS."
-          domains={foundationDomains}
-          onComplete={(scores, reflections) => handleRadarComplete('foundation', scores, reflections)}
-        />
-      )}
+        {stage === 'foundation' && (
+          <RadarAssessmentFlow 
+            assessmentType="foundation"
+            title="Foundation Radar"
+            subtitle="Phase 1 of 3"
+            description="Assess your baseline workplace habits. Remember, score based on the LAST 3 MONTHS."
+            domains={foundationDomains}
+            onComplete={(scores, reflections) => handleRadarComplete('foundation', scores, reflections)}
+          />
+        )}
 
-      {stage === 'leadership' && (
-        <RadarAssessmentFlow 
-          assessmentType="leadership"
-          title="Leadership Radar"
-          description="Evaluate your strategic and interpersonal impact. Remember, score based on the LAST 3 MONTHS."
-          domains={leadershipDomains}
-          onComplete={(scores, reflections) => handleRadarComplete('leadership', scores, reflections)}
-        />
-      )}
+        {stage === 'technical' && (
+          <RadarAssessmentFlow 
+            assessmentType="technical"
+            title="Technical Radar"
+            subtitle="Phase 2 of 3"
+            description="Measure your specific domain execution. Remember, score based on the LAST 3 MONTHS."
+            domains={technicalDomains}
+            onComplete={(scores, reflections) => handleRadarComplete('technical', scores, reflections)}
+          />
+        )}
 
-      {stage === 'technical' && (
-        <RadarAssessmentFlow 
-          assessmentType="technical"
-          title="Technical Radar"
-          description="Measure your specific domain execution. Remember, score based on the LAST 3 MONTHS."
-          domains={technicalDomains}
-          onComplete={(scores, reflections) => handleRadarComplete('technical', scores, reflections)}
-        />
-      )}
+        {stage === 'leadership' && (
+          <RadarAssessmentFlow 
+            assessmentType="leadership"
+            title="Leadership Radar"
+            subtitle="Phase 3 of 3"
+            description="Evaluate your strategic and interpersonal impact. Remember, score based on the LAST 3 MONTHS."
+            domains={leadershipDomains}
+            onComplete={(scores, reflections) => handleRadarComplete('leadership', scores, reflections)}
+          />
+        )}
 
-      {stage === 'complete' && (
-        <div className="max-w-3xl mx-auto pt-16 pb-12 px-6 text-center animate-in fade-in zoom-in-95">
-          <div className="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-6">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-            </svg>
+        {stage === 'complete' && (
+          <div className="max-w-4xl mx-auto py-32 px-10 text-center animate-in fade-in zoom-in-95 duration-1000">
+            <div className="relative inline-block mb-12">
+               <div className="w-32 h-32 bg-[#1A1A1A] rounded-[2.5rem] flex items-center justify-center mx-auto shadow-2xl rotate-3 group hover:rotate-0 transition-transform duration-500">
+                  <ShieldCheck className="h-16 w-16 text-[#C89B3C]" />
+               </div>
+               <div className="absolute -top-4 -right-4 w-12 h-12 bg-[#C89B3C] rounded-full flex items-center justify-center shadow-lg animate-bounce">
+                  <Sparkles className="h-6 w-6 text-white" />
+               </div>
+            </div>
+            
+            <h1 className="text-5xl md:text-6xl font-black text-[#1A1A1A] mb-6 tracking-tighter leading-tight">
+              Diagnostic Integrity <br/><span className="text-[#C89B3C]">100% Verified.</span>
+            </h1>
+            
+            <p className="text-[#1A1A1A]/50 mb-12 text-xl font-medium max-w-2xl mx-auto leading-relaxed">
+              Your Foundation, Technical, and Leadership vectors have been successfully synthesized. Your career intelligence is now ready for deployment.
+            </p>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16 max-w-2xl mx-auto">
+               {[
+                 { label: 'Foundation', status: 'Synthesized' },
+                 { label: 'Technical', status: 'Baselined' },
+                 { label: 'Leadership', status: 'Calibrated' }
+               ].map(phase => (
+                 <div key={phase.label} className="p-6 bg-white border border-[#1A1A1A]/5 rounded-3xl shadow-sm">
+                    <p className="text-[10px] font-black uppercase tracking-widest text-[#1A1A1A]/30 mb-2">{phase.label}</p>
+                    <p className="text-sm font-black text-[#1A1A1A]">{phase.status}</p>
+                 </div>
+               ))}
+            </div>
+
+            <button 
+              onClick={() => router.push('/dashboard')}
+              className="group relative px-12 py-6 bg-[#1A1A1A] text-white rounded-2xl font-black uppercase tracking-[0.2em] hover:bg-[#C89B3C] hover:-translate-y-1 transition-all duration-500 shadow-2xl shadow-[#1A1A1A]/20 active:scale-[0.98]"
+            >
+              <span className="relative z-10 flex items-center gap-4">
+                Enter Command Dashboard
+                <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center group-hover:bg-white/20 transition-colors">
+                  <ChevronRight className="h-5 w-5" />
+                </div>
+              </span>
+            </button>
           </div>
-          <h1 className="text-3xl font-bold text-slate-900 mb-4">Diagnostics Complete</h1>
-          <p className="text-slate-600 mb-8 max-w-lg mx-auto">
-            Your Foundation, Leadership, and Technical baselines have been recorded.
-          </p>
-          <button 
-            onClick={() => router.push('/dashboard')}
-            className="px-6 py-3 bg-slate-900 text-white rounded-md font-medium hover:bg-slate-800 transition-colors"
-          >
-            Construct My Growth Plan
-          </button>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }

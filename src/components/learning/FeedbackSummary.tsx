@@ -1,9 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { CheckCircle2, AlertCircle, Lightbulb, Sparkles } from 'lucide-react';
+import { CheckCircle2, AlertCircle, Lightbulb, Sparkles, TrendingUp } from 'lucide-react';
 
 interface FeedbackSummaryProps {
   subskill: string;
@@ -16,6 +14,7 @@ interface FeedbackSummaryProps {
 
 /**
  * Renders the latest AI-generated feedback for a micro-exercise.
+ * Optimized for the premium Onyx Dashboard container.
  */
 export function FeedbackSummary({
   subskill,
@@ -26,63 +25,78 @@ export function FeedbackSummary({
   masterySignal
 }: FeedbackSummaryProps) {
   return (
-    <Card className="border-slate-200 shadow-sm overflow-hidden">
-      <CardHeader className="bg-slate-50/50 border-b border-slate-100 py-4">
-        <div className="flex items-center justify-between">
-          <CardTitle className="text-sm font-semibold text-slate-700 uppercase tracking-wider flex items-center gap-2">
-            <Sparkles className="w-4 h-4 text-emerald-500" />
-            Coach Insight: {subskill}
-          </CardTitle>
-          <Badge variant="secondary" className="bg-emerald-50 text-emerald-700 border-emerald-100 font-mono">
-            {Math.round(masterySignal * 100)}% Momentum
-          </Badge>
+    <div className="bg-transparent text-white overflow-hidden p-8 md:p-12">
+      <div className="flex flex-col md:flex-row items-start justify-between gap-6 mb-12">
+        <div className="space-y-2">
+          <div className="flex items-center gap-2 text-[#C89B3C]">
+            <Sparkles className="w-5 h-5" />
+            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white/40">Surgical Coaching Insight</span>
+          </div>
+          <h3 className="text-3xl font-black tracking-tight text-white italic">
+            Focus: {subskill}
+          </h3>
         </div>
-      </CardHeader>
-      <CardContent className="pt-6 space-y-6">
-        <p className="text-slate-600 leading-relaxed italic border-l-2 border-slate-200 pl-4">
-          "{summary}"
-        </p>
+        <div className="bg-white/5 border border-white/10 p-4 rounded-2xl flex flex-col items-end gap-2 shadow-inner">
+           <div className="flex items-center gap-2">
+             <TrendingUp className="w-4 h-4 text-[#C89B3C]" />
+             <span className="text-2xl font-black text-white">{Math.round(masterySignal * 100)}%</span>
+           </div>
+           <span className="text-[8px] font-black uppercase tracking-widest text-white/30">Mastery Momentum</span>
+        </div>
+      </div>
 
-        <div className="grid grid-cols-1 gap-4">
-          <section className="space-y-2">
-            <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
-              <CheckCircle2 className="w-3 h-3 text-emerald-500" />
-              Strengths
+      <div className="space-y-12">
+        <div className="relative">
+          <p className="text-xl md:text-2xl text-white/80 leading-relaxed font-medium pl-8 border-l-4 border-[#C89B3C]">
+            "{summary}"
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+          <section className="space-y-6">
+            <h4 className="text-[10px] font-black text-white/30 uppercase tracking-[0.3em] flex items-center gap-2">
+              <CheckCircle2 className="w-4 h-4 text-[#C89B3C]" />
+              Dominant Signals
             </h4>
-            <ul className="space-y-1">
+            <ul className="space-y-4">
               {strengths.map((s, i) => (
-                <li key={i} className="text-sm text-slate-700 flex items-start gap-2">
-                  <span className="text-emerald-500 mt-0.5">•</span> {s}
+                <li key={i} className="text-sm font-bold text-white/90 flex items-start gap-3 group">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#C89B3C] mt-1.5 group-hover:scale-150 transition-transform" /> 
+                  {s}
                 </li>
               ))}
             </ul>
           </section>
 
-          <section className="space-y-2">
-            <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
-              <AlertCircle className="w-3 h-3 text-amber-500" />
-              Growth Areas
+          <section className="space-y-6">
+            <h4 className="text-[10px] font-black text-white/30 uppercase tracking-[0.3em] flex items-center gap-2">
+              <AlertCircle className="w-4 h-4 text-white/20" />
+              Growth Calibrations
             </h4>
-            <ul className="space-y-1">
+            <ul className="space-y-4">
               {improvements.map((imp, i) => (
-                <li key={i} className="text-sm text-slate-700 flex items-start gap-2">
-                  <span className="text-amber-500 mt-0.5">•</span> {imp}
+                <li key={i} className="text-sm font-bold text-white/60 flex items-start gap-3 group">
+                  <span className="w-1.5 h-1.5 rounded-full bg-white/10 mt-1.5 group-hover:bg-white/30 transition-all" /> 
+                  {imp}
                 </li>
               ))}
             </ul>
           </section>
+        </div>
 
-          <section className="bg-amber-50/50 p-4 rounded-lg border border-amber-100/50">
-            <h4 className="text-xs font-bold text-amber-600 uppercase tracking-widest flex items-center gap-2 mb-2">
-              <Lightbulb className="w-3 h-3" />
-              Mentor Tip
-            </h4>
-            <p className="text-sm text-amber-800 leading-snug">
+        <div className="bg-[#C89B3C]/10 p-8 rounded-[2.5rem] border border-[#C89B3C]/20 relative overflow-hidden group hover:bg-[#C89B3C]/20 transition-all duration-500">
+          <div className="relative z-10">
+            <div className="flex items-center gap-2 text-[#C89B3C] mb-4">
+              <Lightbulb className="w-5 h-5" />
+              <span className="text-[10px] font-black uppercase tracking-[0.3em]">Operational Protocol</span>
+            </div>
+            <p className="text-lg font-black text-white leading-relaxed tracking-tight underline decoration-[#C89B3C] decoration-2 underline-offset-4">
               {coachingTip}
             </p>
-          </section>
+          </div>
+          <div className="absolute top-0 right-0 w-32 h-32 bg-[#C89B3C]/5 rounded-full blur-3xl group-hover:bg-[#C89B3C]/20 transition-all" />
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 }

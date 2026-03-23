@@ -4,7 +4,7 @@ import React from 'react';
 import { BarChart, Bar, ResponsiveContainer, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Calendar, TrendingUp } from 'lucide-react';
+import { Calendar, TrendingUp, BarChart3 } from 'lucide-react';
 
 interface SnapshotData {
   month: string;
@@ -24,50 +24,56 @@ interface ThreeMonthSnapshotProps {
  */
 export function ThreeMonthSnapshot({ data, totalExercises, pointsGained }: ThreeMonthSnapshotProps) {
   return (
-    <Card className="border-slate-200 shadow-sm overflow-hidden">
-      <CardHeader className="bg-slate-50/50 border-b border-slate-100 py-4">
-        <div className="flex items-center justify-between">
-          <CardTitle className="text-sm font-semibold text-slate-700 uppercase tracking-wider flex items-center gap-2">
-            <Calendar className="w-4 h-4 text-blue-500" />
-            Last 3 Months Snapshot
+    <Card className="border-[#1A1A1A]/5 shadow-sm overflow-hidden bg-white/50 backdrop-blur-md rounded-[3rem]">
+      <CardHeader className="border-b border-[#1A1A1A]/5 py-6 px-10">
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+          <CardTitle className="text-[10px] font-black text-[#1A1A1A]/40 uppercase tracking-[0.3em] flex items-center gap-2">
+            <BarChart3 className="w-4 h-4 text-[#C89B3C]" />
+            Velocity & Momentum
           </CardTitle>
-          <div className="flex gap-2">
-            <Badge variant="secondary" className="bg-blue-50 text-blue-700 text-[10px] font-bold">
-              {totalExercises} Exercises
+          <div className="flex gap-3">
+            <Badge className="bg-[#1A1A1A] text-white text-[10px] font-black uppercase tracking-widest px-4 py-2 rounded-xl">
+              {totalExercises} Cycles
             </Badge>
-            <Badge variant="secondary" className="bg-emerald-50 text-emerald-700 text-[10px] font-bold">
-              +{pointsGained} Mastery Points
+            <Badge className="bg-[#C89B3C] text-white text-[10px] font-black uppercase tracking-widest px-4 py-2 rounded-xl shadow-lg shadow-[#C89B3C]/20">
+              +{pointsGained} Mastery
             </Badge>
           </div>
         </div>
       </CardHeader>
-      <CardContent className="pt-6">
-        <div className="h-48 w-full">
+      <CardContent className="p-10">
+        <div className="h-64 w-full">
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={data}>
-              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+            <BarChart data={data} margin={{ top: 20, right: 30, left: 0, bottom: 0 }}>
+              <CartesianGrid strokeDasharray="4 4" vertical={false} stroke="#1A1A1A" strokeOpacity={0.05} />
               <XAxis 
                 dataKey="month" 
                 axisLine={false} 
                 tickLine={false} 
-                tick={{ fontSize: 10, fontWeight: 600, fill: '#94a3b8' }} 
+                tick={{ fontSize: 10, fontWeight: 900, fill: '#1A1A1A', opacity: 0.4 }} 
               />
               <YAxis domain={[0, 5]} hide />
               <Tooltip 
-                cursor={{ fill: '#f8fafc' }}
-                contentStyle={{ borderRadius: '12px', border: '1px solid #e2e8f0', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }}
+                cursor={{ fill: '#F5F2E9' }}
+                contentStyle={{ 
+                  borderRadius: '24px', 
+                  border: '1px solid rgba(26,26,26,0.05)', 
+                  boxShadow: '0 25px 50px -12px rgba(0,0,0,0.1)',
+                  padding: '20px',
+                  backgroundColor: '#fff'
+                }}
               />
-              <Bar dataKey="foundation" fill="#3b82f6" radius={[4, 4, 0, 0]} barSize={20} />
-              <Bar dataKey="leadership" fill="#8b5cf6" radius={[4, 4, 0, 0]} barSize={20} />
-              <Bar dataKey="technical" fill="#10b981" radius={[4, 4, 0, 0]} barSize={20} />
+              <Bar dataKey="foundation" fill="#C89B3C" radius={[8, 8, 0, 0]} barSize={24} />
+              <Bar dataKey="leadership" fill="#1A1A1A" radius={[8, 8, 0, 0]} barSize={24} />
+              <Bar dataKey="technical" fill="#1A1A1A" fillOpacity={0.2} radius={[8, 8, 0, 0]} barSize={24} />
             </BarChart>
           </ResponsiveContainer>
         </div>
         
-        <div className="mt-4 flex items-center justify-center gap-6 text-[10px] font-bold uppercase tracking-widest text-slate-400">
-           <div className="flex items-center gap-1.5"><div className="w-2 h-2 rounded-full bg-blue-500" /> Foundation</div>
-           <div className="flex items-center gap-1.5"><div className="w-2 h-2 rounded-full bg-purple-500" /> Leadership</div>
-           <div className="flex items-center gap-1.5"><div className="w-2 h-2 rounded-full bg-emerald-500" /> Technical</div>
+        <div className="mt-8 flex items-center justify-center gap-8 text-[10px] font-black uppercase tracking-[0.2em] text-[#1A1A1A]/40">
+           <div className="flex items-center gap-2 decoration-[#C89B3C] decoration-2 underline underline-offset-4"><div className="w-2 h-2 rounded-full bg-[#C89B3C]" /> Foundation</div>
+           <div className="flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-[#1A1A1A]" /> Leadership</div>
+           <div className="flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-[#1A1A1A]/20" /> Technical</div>
         </div>
       </CardContent>
     </Card>

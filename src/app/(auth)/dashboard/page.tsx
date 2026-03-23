@@ -2,14 +2,13 @@
 
 import React from 'react';
 import { FeedbackSummary } from '@/components/learning/FeedbackSummary';
-import { MasteryTrend } from '@/components/dashboard/MasteryTrend';
 import { TriRadarDisplay } from '@/components/dashboard/TriRadarDisplay';
 import { ThreeMonthSnapshot } from '@/components/dashboard/ThreeMonthSnapshot';
 import { ReflectionInsightsSummary } from '@/components/dashboard/ReflectionInsightsSummary';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { ArrowRight, Target, Sparkles, TrendingUp, Calendar, Zap } from 'lucide-react';
-import { Progress } from '@/components/ui/progress';
+import { ArrowRight, Target, Sparkles, TrendingUp, Calendar, Zap, Rocket } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 export default function DashboardPage() {
   // Mock data for demonstration
@@ -45,96 +44,119 @@ export default function DashboardPage() {
   } as any;
 
   return (
-    <div className="max-w-7xl mx-auto space-y-10 pb-20 px-4">
-      {/* HEADER SECTION */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 px-2">
-        <div className="space-y-1">
-          <div className="flex items-center gap-2 text-emerald-600 mb-2">
-            <TrendingUp className="w-4 h-4" />
-            <span className="text-[10px] font-black uppercase tracking-[0.2em]">Live Career Momentum</span>
+    <div className="max-w-[1400px] mx-auto space-y-12 pb-24 px-4 animate-in fade-in duration-700">
+      
+      {/* PREMIUM HEADER SECTION */}
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-10 px-4 py-8 bg-white/40 backdrop-blur-sm rounded-[3rem] border border-[#1A1A1A]/5 shadow-sm">
+        <div className="space-y-4">
+          <div className="flex items-center gap-3 text-[#C89B3C]">
+            <div className="p-2 bg-[#C89B3C]/10 rounded-xl">
+              <TrendingUp className="w-5 h-5" />
+            </div>
+            <span className="text-xs font-black uppercase tracking-[0.3em] text-[#1A1A1A]">Intelligence Active</span>
           </div>
-          <h1 className="text-4xl font-black text-slate-900 tracking-tight">Career Dashboard</h1>
-          <p className="text-slate-500 font-medium">Welcome back, John. Your readiness for <span className="text-blue-600">Senior Staff Engineer</span> is at 82%.</p>
+          <h1 className="text-5xl font-black text-[#1A1A1A] tracking-tighter">Your Career <span className="text-[#C89B3C]">Orbit</span></h1>
+          <p className="text-[#1A1A1A]/60 font-medium text-lg leading-relaxed">
+            Welcome back, John. Your readiness for <span className="text-[#1A1A1A] font-black underline underline-offset-8 decoration-[#C89B3C] decoration-4">Senior Staff Engineer</span> has reached <span className="text-[#1A1A1A] font-black italic text-2xl ml-1">82%</span>.
+          </p>
         </div>
-        <div className="flex gap-3">
-          <Button variant="outline" className="h-12 px-6 rounded-xl border-slate-200 text-slate-600 font-bold" aria-label="Schedule a coaching session">
-            <Calendar className="w-4 h-4 mr-2" aria-hidden="true" />
-            Schedule Coaching
-          </Button>
-          <Button className="bg-slate-900 text-white hover:bg-slate-800 h-12 rounded-xl px-8 font-bold shadow-lg shadow-slate-200" aria-label="Resume your assessment">
+        
+        <div className="flex flex-wrap gap-4">
+          <button className="h-16 px-8 rounded-2xl bg-white border border-[#1A1A1A]/5 text-[#1A1A1A] font-black uppercase tracking-widest text-xs hover:bg-[#F5F2E9] transition-all flex items-center gap-3 shadow-sm active:scale-95">
+            <Calendar className="w-4 h-4 text-[#C89B3C]" />
+            Schedule Sync
+          </button>
+          <button className="h-16 px-10 rounded-2xl bg-[#1A1A1A] text-white font-black uppercase tracking-widest text-xs hover:bg-black transition-all flex items-center gap-3 shadow-xl shadow-[#1A1A1A]/20 active:scale-95">
             Resume Assessment
-            <ArrowRight className="w-4 h-4 ml-2" aria-hidden="true" />
-          </Button>
+            <ArrowRight className="w-4 h-4 text-[#C89B3C]" />
+          </button>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 xl:grid-cols-12 gap-10">
-        {/* LEFT COLUMN: VISUALIZATIONS & PRIMARY FEEDBACK */}
-        <div className="xl:col-span-8 space-y-10">
+      <div className="grid grid-cols-1 xl:grid-cols-12 gap-12">
+        {/* LEFT COLUMN: CORE INTELLIGENCE */}
+        <div className="xl:col-span-8 space-y-12">
+          
           {/* TRIPLE RADAR SECTION */}
-          <section className="space-y-4">
-            <div className="flex items-center justify-between px-2">
-               <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
-                 <Zap className="w-3 h-3 text-blue-500" />
-                 Triple Dimensional Radar (L1-L5)
-               </h3>
-               <Badge className="bg-blue-50 text-blue-600 border-blue-100 text-[10px]">Active Trajectory: Technical Lead</Badge>
+          <section className="space-y-8">
+            <div className="flex items-center justify-between px-6">
+               <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-lg bg-[#1A1A1A] flex items-center justify-center">
+                    <Zap className="w-4 h-4 text-[#C89B3C]" />
+                  </div>
+                  <h3 className="text-sm font-black text-[#1A1A1A] uppercase tracking-[0.2em]">Capability Matrix</h3>
+               </div>
+               <Badge className="bg-[#F5F2E9] text-[#1A1A1A] border-[#1A1A1A]/5 text-[10px] py-1 px-3 font-black tracking-widest uppercase">Target: Technical Lead</Badge>
             </div>
-            <TriRadarDisplay scores={mockScores} />
+            <div className="bg-white/60 p-10 rounded-[4rem] border border-[#1A1A1A]/5 shadow-sm transition-all hover:bg-white hover:shadow-xl">
+              <TriRadarDisplay scores={mockScores} />
+            </div>
           </section>
 
-          {/* LATEST AI FEEDBACK */}
-          <section className="space-y-4">
-            <div className="flex items-center px-2">
-               <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
-                 <Sparkles className="w-3 h-3 text-amber-500" />
-                 Surgical Coaching Insight
-               </h3>
+          {/* LATEST AI COACH INSIGHT */}
+          <section className="space-y-8">
+            <div className="flex items-center px-6">
+               <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-lg bg-[#C89B3C] flex items-center justify-center">
+                    <Sparkles className="w-4 h-4 text-white" />
+                  </div>
+                  <h3 className="text-sm font-black text-[#1A1A1A] uppercase tracking-[0.2em]">Coach Insight</h3>
+               </div>
             </div>
-            <FeedbackSummary 
-              subskill={latestFeedback.subskill}
-              summary={latestFeedback.summary}
-              strengths={latestFeedback.strengths}
-              improvements={latestFeedback.improvements}
-              coachingTip={latestFeedback.coachingTip}
-              masterySignal={latestFeedback.masterySignal}
-            />
+            <div className="bg-[#1A1A1A] rounded-[4rem] shadow-2xl relative overflow-hidden p-1">
+              <div className="absolute top-0 right-0 w-64 h-64 bg-[#C89B3C]/10 rounded-full blur-[100px] -mr-32 -mt-32" />
+              <FeedbackSummary 
+                subskill={latestFeedback.subskill}
+                summary={latestFeedback.summary}
+                strengths={latestFeedback.strengths}
+                improvements={latestFeedback.improvements}
+                coachingTip={latestFeedback.coachingTip}
+                masterySignal={latestFeedback.masterySignal}
+              />
+            </div>
           </section>
         </div>
 
-        {/* RIGHT COLUMN: TRENDS & INSIGHTS */}
-        <div className="xl:col-span-4 space-y-10">
-          {/* 3-MONTH SNAPSHOT */}
-          <section className="space-y-4">
-            <ThreeMonthSnapshot 
-              data={snapshotData}
-              totalExercises={42}
-              pointsGained={850}
-            />
-          </section>
-
-          {/* AI REFLECTION SUMMARY */}
-          <section className="space-y-4">
-            <ReflectionInsightsSummary insights={reflectionInsights} />
-          </section>
-
-          {/* QUICK FOCUS CARD */}
-          <div className="p-8 bg-slate-900 rounded-3xl text-white relative overflow-hidden group">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/20 blur-3xl -mr-10 -mt-10 group-hover:bg-emerald-500/40 transition-all duration-700" />
-            <div className="relative z-10">
-              <div className="w-10 h-10 rounded-xl bg-emerald-500 flex items-center justify-center mb-6">
-                <Target className="w-5 h-5 text-white" />
-              </div>
-              <h4 className="text-xl font-bold mb-3">Today's Micro-Exercise</h4>
-              <p className="text-slate-400 text-sm mb-8 leading-relaxed">
-                Practice <span className="text-white font-medium">Technical Delegation</span>. 
-                Identify one non-critical task and assign it to a team member today.
-              </p>
-              <Button className="w-full bg-white text-slate-900 hover:bg-slate-100 h-12 rounded-xl font-bold">
-                Start 5-Min Task
-              </Button>
+        {/* RIGHT COLUMN: MOMENTUM & FOCUS */}
+        <div className="xl:col-span-4 space-y-12">
+          
+          {/* 3-MONTH SNAPSHOT (Momentum) */}
+          <section className="space-y-6">
+            <div className="bg-white/60 p-10 rounded-[4rem] border border-[#1A1A1A]/5 shadow-sm">
+              <ThreeMonthSnapshot 
+                data={snapshotData}
+                totalExercises={42}
+                pointsGained={850}
+              />
             </div>
-          </div>
+          </section>
+
+          {/* NEXT FOCUS / MICRO-EXERCISE */}
+          <section className="sticky top-32 space-y-8">
+            <div className="p-12 bg-[#C89B3C] rounded-[4rem] text-white relative overflow-hidden group shadow-2xl shadow-[#C89B3C]/30">
+              <div className="absolute top-0 right-0 w-48 h-48 bg-white/10 blur-3xl -mr-16 -mt-16 group-hover:bg-white/20 transition-all duration-700" />
+              <div className="relative z-10 space-y-10">
+                <div className="w-16 h-16 rounded-[2rem] bg-[#1A1A1A] flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                  <Rocket className="w-8 h-8 text-[#C89B3C]" />
+                </div>
+                <div>
+                  <h4 className="text-xs font-black uppercase tracking-[0.3em] text-[#1A1A1A] mb-4">Priority Target</h4>
+                  <h4 className="text-3xl font-black mb-4 tracking-tight">Focus: Technical Delegation</h4>
+                  <p className="text-white/80 font-medium text-lg leading-relaxed italic">
+                    Identify one non-critical task and assign it to a team member today. 
+                  </p>
+                </div>
+                <button className="w-full py-6 bg-white text-[#1A1A1A] rounded-2xl font-black uppercase tracking-[0.2em] shadow-xl hover:bg-[#F5F2E9] transition-all hover:-translate-y-1 active:scale-95">
+                  Launch Exercise
+                </button>
+              </div>
+            </div>
+
+            {/* AI REFLECTION SUMMARY */}
+            <div className="px-2">
+              <ReflectionInsightsSummary insights={reflectionInsights} />
+            </div>
+          </section>
         </div>
       </div>
     </div>
