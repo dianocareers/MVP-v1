@@ -11,10 +11,10 @@ export class BrandingResolver {
   public async getBranding(orgId: string): Promise<TenantBranding> {
     // Mock branding for Diano Careers B2B demonstration
     return {
-      primary_color: '#3b82f6', // Corporate Blue
-      secondary_color: '#1e293b', // Slate
-      logo_url: '/logos/default-tenant.png',
-      terminology_overrides: {
+      primaryColor: '#3b82f6', // Corporate Blue
+      secondaryColor: '#1e293b', // Slate
+      logoUrl: '/logos/default-tenant.png',
+      terminologyOverrides: {
         'assessment': 'Career Diagnostic',
         'coach': 'Mentor',
         'growth-plan': 'Development Roadmap'
@@ -28,9 +28,9 @@ export class BrandingResolver {
   public generateCssVariables(branding: TenantBranding): string {
     return `
       :root {
-        --tenant-primary: ${branding.primary_color};
-        --tenant-secondary: ${branding.secondary_color};
-        --tenant-logo: url('${branding.logo_url}');
+        --tenant-primary: ${branding.primaryColor};
+        --tenant-secondary: ${branding.secondaryColor};
+        --tenant-logo: url('${branding.logoUrl}');
       }
     `;
   }
