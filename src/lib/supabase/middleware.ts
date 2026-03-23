@@ -48,10 +48,33 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
-  // If user is logged in and tries to access public auth pages, redirect to dashboard
+  // If user is logged in and tries to access public auth pages, redirect to dashboard or assessment
   if (user && (request.nextUrl.pathname.startsWith("/login") || request.nextUrl.pathname.startsWith("/signup"))) {
+    // Check assessment completion
+    const { data: profile } = await supabase
+      .from('user_profiles')
+      .select('id')
+      .eq('id', user.id)
+      .single();
+      
+    let target = "/dashboard";
+    
+    if (!profile) {
+      target = "/assessment";
+    } else {
+      const { data: sessions } = await supabase
+        .from('assessment_sessions')
+        .select('id')
+        .eq('user_id', user.id)
+        .limit(1);
+        
+      if (!sessions || sessions.length === 0) {
+        target = "/assessment";
+      }
+    }
+
     const url = request.nextUrl.clone();
-    url.pathname = "/dashboard";
+    url.pathname = target;
     return NextResponse.redirect(url);
   }
 
