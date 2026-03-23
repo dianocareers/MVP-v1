@@ -37,7 +37,9 @@
     "eslint": "^9",
     "eslint-config-next": "16.1.7",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vercel": "^47.0.4",
+    "wrangler": "^4.76.0"
   },
   "overrides": {
     "@cloudflare/next-on-pages": {
