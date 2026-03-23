@@ -1,0 +1,9 @@
+name = "diano-careers"
+compatibility_date = "2024-04-03"
+compatibility_flags = ["nodejs_compat"]
+
+[pages_build_output_dir]
+directory = ".vercel/output"
+
+[vars]
+# NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY will be set in the Cloudflare Dashboard

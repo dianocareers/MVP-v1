@@ -1,0 +1,82 @@
+# Project Foundation: Diano Careers MVP 2.0
+
+## Goal Description
+Establish the architectural foundation for Diano Careers MVP 2.0. The setup focuses on a hybrid B2C/B2B structure, mobile-friendliness, scalability, and a calm, mentor-like UI utilizing Next.js, shadcn/ui, Tailwind CSS, Supabase, and Recharts.
+
+## User Review Required
+> [!IMPORTANT]
+> Please review the architectural decisions and the folder structure. Specifically, verify if the distinction between tenantless B2C and tenant-based B2B users using Supabase aligns with your data modeling expectations.
+
+## Proposed Architecture & Decisions
+
+### 1. Hybrid B2C & B2B (Tenant model)
+To maintain a **single codebase** while supporting both B2C and B2B users:
+- **Database level**: We will rely on Supabase organizations/tenants. B2B users will have an `organization_id` tied to a tenant, whereas B2C users might have a `null` organization or belong to a global 'Individual' tenant. Row Level Security (RLS) policies in PostgreSQL will scope data correctly.
+- **Application level**: We will use route groups and a shared App Shell. Features will be feature-flagged based on the user's tenant capabilities or role.
+
+### 2. UI & Design System
+- **calm, professional, mentor-like UI**: Minimalist colors, rounded corners, soft shadows, ample whitespace. Instead of stark primary colors, we will configure Tailwind to use soft blues, sage greens, or slate tones.
+- **shadcn/ui**: Will provide accessible, unstyled baseline components that we theme to the mentor-like aesthetic.
+- **Mobile-friendly**: We will build the App Shell layouts to use off-canvas sidebars on smaller breakpoints and ensure Recharts are responsive.
+
+### 3. Folder Structure & Route Groups
+We will utilize the Next.js `src/` directory and App Router route groups for clean separation:
+
+```text
+src/
+  app/
+    (public)/           # Public landing, marketing, and onboarding
+      layout.tsx        # Public navigation header/footer
+      page.tsx          # /
+      login/page.tsx    # /login
+      signup/page.tsx   # /signup
+    (auth)/             # Authenticated User App Shell
+      layout.tsx        # Collapsible Sidebar & Topnav
+      dashboard/page.tsx
+      assessment/page.tsx
+      radar/page.tsx
+      pathways/page.tsx
+      growth-plan/page.tsx
+      coach/page.tsx
+      reassessment/page.tsx
+      marketplace/page.tsx
+    (admin)/            # Admin & Institutional App Shell
+      layout.tsx        # Admin-specific sidebar
+      admin/page.tsx
+      admin/analytics/page.tsx
+  components/
+    ui/                 # shadcn/ui generic components
+    shared/             # Reusable business components (e.g., RadarChartCard)
+    layout/             # Sidebar, Header, Footer
+  lib/
+    utils.ts            # Tailwind generic utils
+    supabase/           # client.ts, server.ts
+  types/                # TypeScript global models (User, Profile, etc.)
+  services/             # Data fetching & mutations
+  hooks/                # Reusable React hooks
+```
+
+## Proposed Changes
+I will perform the initial scaffold of the repository.
+
+#### [NEW] Next.js Initialization
+Using `npx create-next-app@latest ./` in the workspace directory with App Router and `src/`.
+
+#### [NEW] Folder creation and boilerplate routes
+Adding the route groups, layout files, and empty `page.tsx` placeholders for every requested route.
+
+#### [NEW] Supabase & Recharts
+Installing `recharts` and `@supabase/ssr` / `@supabase/supabase-js`, and creating the `src/lib/supabase` scaffolding.
+
+## Verification Plan
+
+### Automated Tests
+- Run `npm run build` to verify the application builds without TypeScript or ESLint errors.
+- Run `npm run lint` to verify coding standards.
+
+### Manual Verification
+- Start the server (`npm run dev`) and visit:
+  - `http://localhost:3000/`
+  - `http://localhost:3000/dashboard`
+  - `http://localhost:3000/admin`
+- Ensure each layout renders correctly with the corresponding nested placeholder page.

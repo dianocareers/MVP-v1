@@ -1,7 +1,10 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  // Cloudflare Pages works best with these settings if using SSR
+  // experimental: {
+  //   runtime: 'edge', 
+  // },
 };
 
 export default nextConfig;
