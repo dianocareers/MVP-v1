@@ -82,9 +82,9 @@ export function calculateRoleReadiness(
   userScores: UnifiedAssessmentOutput,
   role: RoleRequirement
 ): RoleReadiness {
-  const fAvg = calculateAverageLevel(userScores.foundation_scores);
-  const lAvg = calculateAverageLevel(userScores.leadership_scores);
-  const tAvg = calculateAverageLevel(userScores.technical_scores);
+  const fAvg = calculateAverageLevel(userScores.foundationScores);
+  const lAvg = calculateAverageLevel(userScores.leadershipScores);
+  const tAvg = calculateAverageLevel(userScores.technicalScores);
 
   const calculateLayer = (actual: number, required: number): LayerReadiness => {
     const score = Math.min(100, Math.round((actual / required) * 100));
