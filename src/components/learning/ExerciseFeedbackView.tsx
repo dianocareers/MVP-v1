@@ -98,7 +98,7 @@ export function ExerciseFeedbackView({ onContinue, onRetry, feedback }: Exercise
         </p>
 
         {/* 3. EXPANDABLE INSIGHTS */}
-        <Accordion type="single" collapsible className="w-full">
+        <Accordion className="w-full">
           <AccordionItem value="strengths" className="border-slate-100">
             <AccordionTrigger className="hover:no-underline py-4 text-slate-600 font-semibold text-sm">
               <span className="flex items-center gap-2">
