@@ -77,8 +77,8 @@ export class AICoachService {
     const analysis: Record<string, CoachingInsight> = {};
     
     for (const ref of reflections) {
-      const score = scores[ref.domain_name] || 0;
-      analysis[ref.domain_name] = await this.analyzeReflection(ref.domain_name, score, ref.reflection_text);
+      const score = scores[ref.domainName] || 0;
+      analysis[ref.domainName] = await this.analyzeReflection(ref.domainName, score, ref.reflectionText);
     }
     
     return analysis;

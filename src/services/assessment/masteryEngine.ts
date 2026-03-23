@@ -70,7 +70,7 @@ export class MasteryEngine {
   }
 
   private calculateRollingAverage(feedback: ExerciseFeedback[]): number {
-    const scores = feedback.map(f => f.mastery_signal_score);
+    const scores = feedback.map(f => f.masterySignalScore);
     const sum = scores.reduce((a, b) => a + b, 0);
     return sum / scores.length;
   }
